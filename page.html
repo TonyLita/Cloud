@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Convertisseur Images vers PDF</title>
+    <!-- Chargement de la bibliothèque html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .btn-pdf {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .btn-pdf:hover {
+            background-color: #34495e;
+        }
+
+        /* Conteneur pour le PDF */
+        #pdf-content {
+            background-color: white;
+            width: 800px;
+            margin: auto;
+            display: none;
+            /* Masqué à l'écran, visible pour la génération */
+        }
+
+        .page {
+            width: 100%;
+            height: 1000px;
+            /* Hauteur approximative d'une page A4 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            page-break-after: always;
+        }
+
+        img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Générateur de Rapport PDF</h1>
+    <p>Cliquez sur le bouton ci-dessous pour créer un PDF avec une image par page.</p>
+
+    <button onclick="generatePDF()" class="btn-pdf">Générer le PDF</button>
+
+    <!-- Structure du PDF -->
+    <div id="pdf-content">
+        <div class="page">
+            <img src="image1.png" alt="Capture Admin 1">
+        </div>
+        <div class="page">
+            <img src="image2.png" alt="Capture Admin 2">
+        </div>
+        <div class="page">
+            <img src="image3.png" alt="Capture Login">
+        </div>
+    </div>
+
+    <script>
+        function generatePDF() {
+            const element = document.getElementById('pdf-content');
+            element.style.display = 'block'; // Rendre visible pour la capture
+
+            const options = {
+                margin: 0,
+                filename: 'Rapport_Projet_Cloud.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Génération
+            html2pdf().set(options).from(element).save().then(() => {
+                element.style.display = 'none'; // Re-masquer après génération
+            });
+        }
+    </script>
+</body>
+
+</html>

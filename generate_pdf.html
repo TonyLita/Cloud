@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur PDF - Captures d'écran du Projet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .btn-generate {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 30px;
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-section h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .image-preview {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-label {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            color: #2e7d32;
+            font-weight: bold;
+            display: none;
+            margin-top: 20px;
+        }
+        
+        /* Styles pour le contenu PDF */
+        #pdf-content {
+            display: none;
+            background: white;
+        }
+        
+        .pdf-page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            box-sizing: border-box;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+        
+        .pdf-page img {
+            max-width: 100%;
+            max-height: 95%;
+            object-fit: contain;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .pdf-caption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📄 Générateur de Rapport PDF</h1>
+        <p class="subtitle">Projet Cloud - Système de Gestion des Utilisateurs</p>
+        
+        <button onclick="generatePDF()" class="btn-generate">
+            🚀 Générer le PDF (3 pages)
+        </button>
+        
+        <div class="preview-section">
+            <h3>📸 Aperçu des captures d'écran</h3>
+            
+            <div class="image-preview">
+                <div class="image-label">Page 1 - Interface de Connexion</div>
+                <img src="Capture d'écran 2026-02-03 125813.png" alt="Connexion" onerror="this.parentElement.style.border='2px solid red'; this.alt='❌ Image non trouvée';">
+            </div>
+            
+            <div class="image-preview">
+                <div class="image-label">Page 2 - Dashboard Utilisateur Admin</div>
+                <img src="Capture d'écran 2026-02-03 125803.png" alt="Dashboard Admin" onerror="this.parentElement.style.border='2px solid red'; this.alt='❌ Image non trouvée';">
+            </div>
+            
+            <div class="image-preview">
+                <div class="image-label">Page 3 - Gestion des Utilisateurs</div>
+                <img src="Capture d'écran 2026-02-03 125741.png" alt="Gestion Utilisateurs" onerror="this.parentElement.style.border='2px solid red'; this.alt='❌ Image non trouvée';">
+            </div>
+        </div>
+        
+        <div class="status" id="status-message">
+            ✅ PDF généré avec succès !
+        </div>
+    </div>
+
+    <!-- Contenu caché pour la génération PDF -->
+    <div id="pdf-content">
+        <div class="pdf-page">
+            <img src="Capture d'écran 2026-02-03 125741.png" alt="Page 1">
+            <div class="pdf-caption">Interface de Connexion - Login.vue</div>
+        </div>
+        <div class="pdf-page">
+            <img src="Capture d'écran 2026-02-03 125803.png" alt="Page 2">
+            <div class="pdf-caption">Dashboard Utilisateur Admin - Accueil.vue</div>
+        </div>
+        <div class="pdf-page">
+            <img src="Capture d'écran 2026-02-03 125813.png" alt="Page 3">
+            <div class="pdf-caption">Gestion des Utilisateurs (Admin) - Accueil.vue</div>
+        </div>
+    </div>
+
+    <script>
+        // Conversion des images en base64 avant génération
+        const imageUrls = [
+            "Capture d'écran 2026-02-03 125813.png",
+            "Capture d'écran 2026-02-03 125803.png",
+            "Capture d'écran 2026-02-03 125741.png"
+        ];
+        
+        function loadImageAsBase64(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = this.naturalWidth;
+                    canvas.height = this.naturalHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(this, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+        
+        async function generatePDF() {
+            const button = document.querySelector('.btn-generate');
+            const statusMsg = document.getElementById('status-message');
+            
+            try {
+                // Feedback utilisateur
+                button.disabled = true;
+                button.textContent = '⏳ Chargement des images...';
+                statusMsg.style.display = 'none';
+                
+                // Charger toutes les images en base64
+                const base64Images = await Promise.all(
+                    imageUrls.map(url => loadImageAsBase64(url))
+                );
+                
+                button.textContent = '⏳ Génération du PDF...';
+                
+                // Remplacer les sources d'images par base64
+                const pdfImages = document.querySelectorAll('#pdf-content img');
+                pdfImages.forEach((img, index) => {
+                    img.src = base64Images[index];
+                });
+                
+                // Rendre visible pour la capture
+                const element = document.getElementById('pdf-content');
+                element.style.display = 'block';
+
+                const options = {
+                    margin:       [5, 5, 5, 5],
+                    filename:     'Rapport_Projet_Cloud_' + new Date().toISOString().slice(0,10) + '.pdf',
+                    image:        { type: 'jpeg', quality: 0.95 },
+                    html2canvas:  { 
+                        scale: 2,
+                        useCORS: false,
+                        allowTaint: true,
+                        logging: false,
+                        backgroundColor: '#ffffff'
+                    },
+                    jsPDF:        { 
+                        unit: 'mm', 
+                        format: 'a4', 
+                        orientation: 'portrait'
+                    },
+                    pagebreak:    { mode: ['css', 'legacy'] }
+                };
+
+                // Génération du PDF
+                await html2pdf().set(options).from(element).save();
+                
+                element.style.display = 'none';
+                button.disabled = false;
+                button.textContent = '🚀 Générer le PDF (3 pages)';
+                statusMsg.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusMsg.style.display = 'none';
+                }, 5000);
+                
+            } catch (err) {
+                console.error('Erreur génération PDF:', err);
+                alert('❌ Erreur: ' + err.message + '\n\nAssurez-vous que les 3 images sont bien dans le même dossier que ce fichier HTML.');
+                document.getElementById('pdf-content').style.display = 'none';
+                button.disabled = false;
+                button.textContent = '🚀 Générer le PDF (3 pages)';
+            }
+        }
+        
+        // Vérification du chargement des images au démarrage
+        window.addEventListener('load', () => {
+            const images = document.querySelectorAll('.image-preview img');
+            let loadedCount = 0;
+            
+            images.forEach(img => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    loadedCount++;
+                }
+            });
+            
+            if (loadedCount === images.length) {
+                console.log('✅ Toutes les images sont chargées correctement (' + loadedCount + '/3)');
+            } else {
+                console.warn('⚠️ ' + loadedCount + '/3 images chargées');
+            }
+        });
+    </script>
+</body>
+</html>
