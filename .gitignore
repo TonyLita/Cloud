@@ -1,0 +1,17 @@
+# Backend
+Backend/target/
+Backend/*.jar
+Backend/postgres_15.tar
+*.class
+
+# Node / Vue.js
+web/node_modules/
+web/dist/
+web/.DS_Store
+
+# Docker
+.data/
+
+# OS files
+.DS_Store
+Thumbs.db

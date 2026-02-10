@@ -1,0 +1,48 @@
+# Dossiers de dépendances et de build
+node_modules/
+**/node_modules/
+target/
+**/target/
+dist/
+**/dist/
+build/
+**/build/
+.gradle/
+.m2/
+
+# Dossiers spécifiques aux plateformes mobiles
+mobile/android/
+mobile/ios/
+**/android/
+**/ios/
+
+# Fichiers de données et médias (souvent volumineux)
+map-data/
+image/
+*.mbtiles
+*.geojson
+
+# Configuration IDE et Système
+.vscode/
+.idea/
+.git/
+.gitignore
+.dockerignore
+*.swp
+*.log
+.DS_Store
+Thumbs.db
+
+# Documentation et fichiers de suivi
+*.md
+Project_Tracking.csv
+ClentWeb.md
+DOCUMENTATION_TECHNIQUE.md
+REFACTORISATION_ERP.md
+
+# SQL (normalement utilisé via montage de volume, pas besoin de l'envoyer au build context du backend)
+# base.sql
+
+# Docker
+docker-compose*.yml
+Dockerfile
