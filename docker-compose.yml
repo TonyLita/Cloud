@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: route
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./base.sql:/docker-entrypoint-initdb.d/base.sql
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: spring_backend
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - FIREBASE_SYNC_ENABLED=true # Changez à false si vous êtes strictement offline
+    depends_on:
+      - db
+    # Note: On laisse Docker gérer le réseau par défaut pour permettre au backend de voir 'db'
+
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: vue_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  mobile:
+    build:
+      context: ./mobile
+      dockerfile: Dockerfile
+    container_name: ionic_mobile
+    ports:
+      - "81:80"
+    depends_on:
+      - backend
+
+  tileserver:
+    image: maptiler/tileserver-gl
+    container_name: tileserver_gl
+    restart: always
+    volumes:
+      - ./map-data:/data
+    ports:
+      - "8085:8080"
+    command: ["-p", "8080"]
+
+volumes:
+  db-data:
